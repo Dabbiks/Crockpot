@@ -1,0 +1,4 @@
+name: Crockpot
+version: '1.0-ALPHA'
+main: dabbiks.crockpot.Crockpot
+api-version: '1.21'
