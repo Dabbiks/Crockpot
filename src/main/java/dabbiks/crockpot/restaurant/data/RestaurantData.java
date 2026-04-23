@@ -1,11 +1,11 @@
-package dabbiks.crockpot.restaurant.data.persistent;
+package dabbiks.crockpot.restaurant.data;
 
 import com.google.gson.annotations.Expose;
 import dabbiks.crockpot.restaurant.Restaurant;
 
 import java.util.UUID;
 
-public class PersistentRestaurantData {
+public class RestaurantData {
 
     @Expose private int id;
     @Expose private UUID owner;

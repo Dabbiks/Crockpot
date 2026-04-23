@@ -1,9 +1,8 @@
-package dabbiks.crockpot.restaurant.data.persistent;
+package dabbiks.crockpot.restaurant.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dabbiks.crockpot.Crockpot;
-import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -27,7 +26,7 @@ public class RestaurantDataLoader {
         }
     }
 
-    public PersistentRestaurantData loadRestaurantData(UUID uuid, int id) {
+    public RestaurantData loadRestaurantData(UUID uuid, int id) {
 
         File file = new File(dataFolder + "/" + uuid);
         if (!file.exists()) file.mkdirs();
@@ -36,7 +35,7 @@ public class RestaurantDataLoader {
         if (!file.exists()) return null;
 
         try (FileReader reader = new FileReader(file)) {
-            PersistentRestaurantData restaurantData = gson.fromJson(reader, PersistentRestaurantData.class);
+            RestaurantData restaurantData = gson.fromJson(reader, RestaurantData.class);
             restaurantData.setOwner(uuid);
             return restaurantData;
 
@@ -46,7 +45,7 @@ public class RestaurantDataLoader {
         return null;
     }
 
-    public void saveRestaurantData(PersistentRestaurantData restaurantData) {
+    public void saveRestaurantData(RestaurantData restaurantData) {
         File file = new File(dataFolder, restaurantData.getOwner().toString() + ".json");
         try (FileWriter writer = new FileWriter(file)) {
             gson.toJson(restaurantData, writer);

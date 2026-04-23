@@ -16,6 +16,15 @@ public class Restaurant {
         this.furniture = new ArrayList<>();
     }
 
+    public boolean generateMap() {
+        return true;
+    }
 
+    public boolean generateFurniture() {
+        return true;
+    }
 
+    public RestaurantType getRestaurantType() {
+        return restaurantType;
+    }
 }
