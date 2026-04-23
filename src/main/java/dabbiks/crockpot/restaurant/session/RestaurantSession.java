@@ -4,18 +4,22 @@ import dabbiks.crockpot.Crockpot;
 import dabbiks.crockpot.managers.world.WorldGridManager;
 import dabbiks.crockpot.restaurant.Restaurant;
 import dabbiks.crockpot.restaurant.data.RestaurantData;
+import dabbiks.crockpot.restaurant.tasks.TaskManager;
 import org.bukkit.plugin.Plugin;
 
 public class RestaurantSession {
 
     private final RestaurantData restaurantData;
-    private RestaurantState restaurantState;
     private final Crockpot plugin;
+    private final TaskManager taskManager;
+
+    private RestaurantState restaurantState;
     private int[] gridPosition;
 
     public RestaurantSession(RestaurantData restaurantData, Crockpot plugin) {
         this.restaurantData = restaurantData;
         this.plugin = plugin;
+        this.taskManager = new TaskManager(plugin);
         setRestaurantState(RestaurantState.SETUP);
     }
 
@@ -34,6 +38,8 @@ public class RestaurantSession {
             System.err.println("[RESTAURANT] Error while generating furniture for "  + restaurantData.getOwner() + ", " + restaurant.getRestaurantType());
             return false;
         }
+
+
         setRestaurantState(RestaurantState.WAIT);
         return true;
     }

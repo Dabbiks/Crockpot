@@ -10,21 +10,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TaskManager extends BukkitRunnable {
 
     private final Crockpot plugin;
-
-
     private final List<Task> executors = new CopyOnWriteArrayList<>();
 
     public TaskManager(Crockpot plugin) {
         this.plugin = plugin;
-//        executors.add(new StartTask());
-
         runTaskTimer(plugin, 0, 1);
     }
 
     public void addTask(Task task) {
         executors.add(task);
     }
-
     public void removeTask(Task task) {
         executors.remove(task);
     }
