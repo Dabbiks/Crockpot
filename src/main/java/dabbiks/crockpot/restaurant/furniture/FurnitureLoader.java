@@ -16,7 +16,7 @@ public class FurnitureLoader {
     }
 
     public void loadFurniture() {
-        File folder = new File(plugin.getDataFolder(), "furniture");
+        File folder = new File(plugin.getDataFolder(), "/furniture");
         if (!folder.exists()) folder.mkdirs();
         scanAndLoad(folder, new Gson());
     }
@@ -35,11 +35,17 @@ public class FurnitureLoader {
 
             try (FileReader reader = new FileReader(file)) {
                 FurnitureDefinition definition = gson.fromJson(reader, FurnitureDefinition.class);
-                if (definition != null && definition.getId() != null) {
+
+                File schematic = new File(plugin.getDataFolder() + "/furniture", definition.getSchematic() + ".schem");
+                if (!schematic.exists()) {
+                    System.err.println("[FURNITURE] Error while loading schematic '" + file.getAbsolutePath() + "'");
+                }
+
+                if (definition.getId() != null) {
                     manager.registerFurniture(definition);
                 }
             } catch (Exception e) {
-                System.err.println("Błąd podczas ładowania: " + file.getAbsolutePath());
+                System.err.println("[FURNITURE] Error while reading file '" + file.getAbsolutePath() + "'");
                 e.printStackTrace();
             }
         }
