@@ -17,7 +17,7 @@ public class WorldGridManager {
             }
         }
         Bukkit.getLogger().severe("[RESTAURANT] Failed to find empty grid location");
-        return null;
+        return new int[]{};
     }
 
     public void releaseLocation(int row, int col) {
