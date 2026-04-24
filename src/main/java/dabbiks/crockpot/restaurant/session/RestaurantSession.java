@@ -1,11 +1,10 @@
 package dabbiks.crockpot.restaurant.session;
 
 import dabbiks.crockpot.Crockpot;
-import dabbiks.crockpot.managers.world.WorldGridManager;
+import dabbiks.crockpot.managers.world.GridLocation;
 import dabbiks.crockpot.restaurant.Restaurant;
 import dabbiks.crockpot.restaurant.data.RestaurantData;
 import dabbiks.crockpot.restaurant.tasks.TaskManager;
-import org.bukkit.plugin.Plugin;
 
 public class RestaurantSession {
 
@@ -14,7 +13,7 @@ public class RestaurantSession {
     private final TaskManager taskManager;
 
     private RestaurantState restaurantState;
-    private int[] gridPosition;
+    private GridLocation gridPosition;
 
     public RestaurantSession(RestaurantData restaurantData, Crockpot plugin) {
         this.restaurantData = restaurantData;
@@ -26,7 +25,8 @@ public class RestaurantSession {
     private boolean setup() {
         Restaurant restaurant = restaurantData.getRestaurant();
         gridPosition = plugin.getWorldGridManager().claimLocation();
-        if (gridPosition.length < 2) {
+
+        if (gridPosition == null) {
             System.err.println("[RESTAURANT] Error while selecting empty grid space for " + restaurantData.getOwner() + ", " + restaurant.getRestaurantType());
             return false;
         }
@@ -39,16 +39,22 @@ public class RestaurantSession {
             return false;
         }
 
-
         setRestaurantState(RestaurantState.WAIT);
         return true;
     }
 
     private boolean stop() {
-        plugin.getWorldGridManager().releaseLocation(gridPosition[0], gridPosition[1]);
+        if (gridPosition != null) {
+            plugin.getWorldGridManager().releaseLocation(gridPosition);
+        }
         return true;
     }
 
-    public void setRestaurantState(RestaurantState restaurantState) { this.restaurantState = restaurantState; }
-    public RestaurantState getRestaurantState() { return restaurantState; }
+    public void setRestaurantState(RestaurantState restaurantState) {
+        this.restaurantState = restaurantState;
+    }
+
+    public RestaurantState getRestaurantState() {
+        return restaurantState;
+    }
 }
