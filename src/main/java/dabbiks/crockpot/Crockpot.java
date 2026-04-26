@@ -1,5 +1,6 @@
 package dabbiks.crockpot;
 
+import dabbiks.crockpot.managers.world.WorldGenerator;
 import dabbiks.crockpot.managers.world.WorldGridManager;
 import dabbiks.crockpot.restaurant.furniture.FurnitureLoader;
 import dabbiks.crockpot.restaurant.furniture.FurnitureManager;
@@ -16,7 +17,9 @@ public final class Crockpot extends JavaPlugin {
     public void onEnable() {
         furnitureManager = new FurnitureManager();
         worldGridManager = new WorldGridManager();
+
         new FurnitureLoader(plugin, furnitureManager);
+        new WorldGenerator().generateWorlds();
     }
 
     @Override

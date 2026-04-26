@@ -17,7 +17,10 @@ public class PlacedFurniture<T extends FurnitureType> {
         this.rotation = rotation;
     }
 
-    public T getFurnitureType() {
-        return furnitureType;
-    }
+    public FurnitureDefinition getDefinition() { return definition; }
+    public RestaurantType getRestaurantType() { return restaurantType; }
+    public T getFurnitureType() { return furnitureType; }
+
+    public int getRotation() { return rotation; }
+    public void setRotation(int rotation) { this.rotation = rotation; }
 }
