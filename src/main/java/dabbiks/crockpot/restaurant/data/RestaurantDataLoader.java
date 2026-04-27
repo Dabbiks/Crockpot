@@ -27,18 +27,20 @@ public class RestaurantDataLoader {
     }
 
     public RestaurantData loadRestaurantData(UUID uuid, int id) {
+        File userFolder = new File(dataFolder, uuid.toString());
+        if (!userFolder.exists()) {
+            userFolder.mkdirs();
+        }
 
-        File file = new File(dataFolder + "/" + uuid);
-        if (!file.exists()) file.mkdirs();
-
-        file = new File(dataFolder, id + ".json");
+        File file = new File(userFolder, id + ".json");
         if (!file.exists()) return null;
 
         try (FileReader reader = new FileReader(file)) {
             RestaurantData restaurantData = gson.fromJson(reader, RestaurantData.class);
-            restaurantData.setOwner(uuid);
+            if (restaurantData != null) {
+                restaurantData.setOwner(uuid);
+            }
             return restaurantData;
-
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -46,7 +48,12 @@ public class RestaurantDataLoader {
     }
 
     public void saveRestaurantData(RestaurantData restaurantData) {
-        File file = new File(dataFolder, restaurantData.getOwner().toString() + ".json");
+        File userFolder = new File(dataFolder, restaurantData.getOwner().toString());
+        if (!userFolder.exists()) {
+            userFolder.mkdirs();
+        }
+
+        File file = new File(userFolder, restaurantData.getId() + ".json");
         try (FileWriter writer = new FileWriter(file)) {
             gson.toJson(restaurantData, writer);
         } catch (IOException exception) {

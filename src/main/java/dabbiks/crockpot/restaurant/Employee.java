@@ -1,10 +1,12 @@
 package dabbiks.crockpot.restaurant;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.UUID;
 
 public class Employee {
 
-    private final UUID uuid;
+    @Expose private final UUID uuid;
 
     public Employee(UUID uuid) {
         this.uuid = uuid;
