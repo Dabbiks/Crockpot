@@ -1,5 +1,8 @@
 package dabbiks.crockpot.player.data;
 
+import dabbiks.crockpot.Crockpot;
+import org.bukkit.plugin.Plugin;
+
 import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
@@ -8,25 +11,26 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerDataManager {
 
-    private static final Map<UUID, PersistentData> dataMap = new ConcurrentHashMap<>();
+    private static final Map<UUID, PlayerData> dataMap = new ConcurrentHashMap<>();
+    private final Crockpot plugin;
+
+    public PlayerDataManager(Crockpot plugin) {
+        this.plugin = plugin;
+    }
 
     @Nullable
-    public static PersistentData getData(UUID uuid) {
+    public static PlayerData getData(UUID uuid) {
         return dataMap.get(uuid);
     }
 
-    /**
-     * Wczytuje dane asynchronicznie. Wywołuj w AsyncPlayerPreLoginEvent lub wywołując .thenAccept na zwracanym Future.
-     */
-    public static CompletableFuture<PersistentData> loadDataAsync(UUID uuid, String playerName) {
+    public CompletableFuture<PlayerData> loadDataAsync(UUID uuid, String playerName) {
         return CompletableFuture.supplyAsync(() -> {
-            PersistentData persistentData = Main.persistentDataJson.loadPlayerData(uuid);
+            PlayerData persistentData = plugin.getPlayerDataJson().loadPlayerData(uuid);
 
             if (persistentData == null) {
-                persistentData = new PersistentData();
+                persistentData = new PlayerData();
             }
 
-            // Zawsze upewnij się, że UUID i nazwa są aktualne
             persistentData.setUUID(uuid);
             persistentData.setName(playerName != null ? playerName : "Unknown");
 
@@ -39,13 +43,10 @@ public class PlayerDataManager {
         dataMap.remove(uuid);
     }
 
-    /**
-     * Zapisuje dane w osobnym wątku, nie obciążając serwera.
-     */
-    public static void saveDataAsync(UUID uuid) {
-        PersistentData persistentData = getData(uuid);
+    public void saveDataAsync(UUID uuid) {
+        PlayerData persistentData = getData(uuid);
         if (persistentData != null) {
-            CompletableFuture.runAsync(() -> Main.persistentDataJson.savePlayerData(persistentData));
+            CompletableFuture.runAsync(() -> plugin.getPlayerDataJson().savePlayerData(persistentData));
         }
     }
 }
